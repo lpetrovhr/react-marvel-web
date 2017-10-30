@@ -1,0 +1,15 @@
+{
+  "presets": ["es2015", "stage-3", "react"],
+  "plugins": [
+    "extract-hoc/babel",
+    "react-hot-loader/babel",
+    ["react-css-modules", {
+      "filetypes": {
+        ".scss": {
+          "syntax": "postcss-scss"
+        }
+      },
+      "generateScopedName": "[local]--[hash:base64:8]"
+    }]
+  ]
+}
