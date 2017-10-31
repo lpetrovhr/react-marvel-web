@@ -1,6 +1,7 @@
 import 'whatwg-fetch'
 import store from 'store'
 import { SubmissionError } from 'redux-form'
+import Crypto from 'crypto-js'
 
 import errors from 'constants/errors'
 
@@ -73,8 +74,11 @@ const errorHandler = (error) => {
   throw error
 }
 
-function fetchApi (path, options = {}) {
+function fetchApi (path, type, options = {}) {
   const { query, ...opts } = options
+
+  if (type === 'marvel')
+    path += generateToken()
 
   return fetch(getApiUrl(path, query))
     .then(jsonParser)
@@ -82,8 +86,14 @@ function fetchApi (path, options = {}) {
     .catch(errorHandler)
 }
 
-const getApi = (path, query) =>
-  fetchApi(path, { query })
+function generateToken () {
+  const ts = new Date().getTime()
+  const hash = Crypto.MD5(ts + MARVEL_PRIVATE_KEY + MARVEL_PUBLIC_KEY)
+  return `?ts=${ts}&apikey=${MARVEL_PUBLIC_KEY}&hash=${hash}`
+} 
+
+const getApi = (path, type, query) =>
+  fetchApi(path, type, { query })
 
 const fetchWithBody = method => (path, body) =>
   fetchApi(path, { method, body })
@@ -91,7 +101,4 @@ const fetchWithBody = method => (path, body) =>
 export default {
   fetch: fetchApi,
   get: getApi,
-  post: fetchWithBody('POST'),
-  put: fetchWithBody('PUT'),
-  delete: fetchWithBody('DELETE')
 }

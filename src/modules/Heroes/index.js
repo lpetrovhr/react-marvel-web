@@ -3,9 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { fetchHeroes } from '../../actions/heroes'
-import HeroeCard from 'components/HeroeCard'
-
-import Crypto from 'crypto-js'
+import CardComponent from 'components/MarvelCard'
 
 class Heroes extends Component {
 
@@ -20,17 +18,20 @@ class Heroes extends Component {
 
 	getHeroes() {
 		const { dispatch } = this.props
-	    const ts = new Date().getTime()
-	    const hash = Crypto.MD5(ts + MARVEL_PRIVATE_KEY + MARVEL_PUBLIC_KEY)
-	    const string = `ts=${ts}&apikey=${MARVEL_PUBLIC_KEY}&hash=${hash}`
-		dispatch(fetchHeroes(string))
+		dispatch(fetchHeroes())
 	}
 
 	render () {
 		const { heroes } = this.props
 		const allHeroes = heroes.results
 		return allHeroes.map((heroe, key) => 
-			<HeroeCard key={key} id={heroe.id} name={heroe.name} thumbnail={heroe.thumbnail} />
+			<CardComponent
+				key={key}
+				id={heroe.id}
+				name={heroe.name}
+				thumbnail={heroe.thumbnail}
+				myRoute={'heroes'}
+			/>
 		)
 	}
 }

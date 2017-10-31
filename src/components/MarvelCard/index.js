@@ -7,24 +7,14 @@ import Crypto from 'crypto-js'
 
 import './styles.scss'
 
-class HeroeCardComponent extends Component {
-
-	constructor() {
-    	super();
-    	this.onHeroeClick = this.onHeroeClick.bind(this);
-  	}
-
-	onHeroeClick(heroeId) {
-		const { router } = this.props
-		router.push(`/heroes/${heroeId}`)
-	}
+class CardComponent extends Component {
 
 	render () {
-		const { id, name, thumbnail } = this.props
+		const { id, name, thumbnail, myRoute } = this.props
 		const image = thumbnail.path + '.' + thumbnail.extension
 		return (
-			<Link onClick={() => this.onHeroeClick(id)}>
-				<div styleName="heroCard">
+			<Link to={`/${myRoute}/${id}`}>
+				<div styleName="marvelCard">
 					<img src={image} alt={name} />
 					<h4>{name}</h4>
 				</div>
@@ -33,10 +23,11 @@ class HeroeCardComponent extends Component {
 	}
 }
 
-HeroeCardComponent.propTypes = {
+CardComponent.propTypes = {
   id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   thumbnail: PropTypes.object.isRequired,
-  router: PropTypes.object.isRequired
+  myRoute: PropTypes.string.isRequired,
+  history: PropTypes.object.isRequired
 }
-export default HeroeCardComponent
+export default withRouter(CardComponent)

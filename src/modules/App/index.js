@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import { browserHistory } from 'react-router'
 import { Provider } from 'react-redux'
 
 import theStore from './../../store'

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import { fetchComics } from '../../actions/comics'
+import CardComponent from 'components/MarvelCard'
 
 import Crypto from 'crypto-js'
 
@@ -19,17 +20,20 @@ class Comics extends Component {
 
 	getComics() {
 		const { dispatch } = this.props
-	    const ts = new Date().getTime()
-	    const hash = Crypto.MD5(ts + MARVEL_PRIVATE_KEY + MARVEL_PUBLIC_KEY)
-	    const string = `ts=${ts}&apikey=${MARVEL_PUBLIC_KEY}&hash=${hash}`
-		dispatch(fetchComics(string))
+		dispatch(fetchComics())
 	}
 
 	render () {
-		return (
-		   <div>
-		     <h1>Comics</h1>
-		   </div>
+		const { comics } = this.props
+		const allComics = comics.results
+		return allComics.map((comic, key) => 
+			<CardComponent
+				key={key}
+				id={comic.id}
+				name={comic.title}
+				thumbnail={comic.thumbnail}
+				myRoute={'comics'}
+			/>
 		)
 	}
 }
